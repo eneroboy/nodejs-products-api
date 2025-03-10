@@ -34,26 +34,20 @@ This project is a RESTful API built with Node.js for managing products. It suppo
 ## Installation
 
 1. **Clone the repository:**
-
    ```bash
    git clone https://github.com/your_username/nodejs-products-api.git
    cd nodejs-products-api
 
-
 2. **Install dependencies:**
-
    ```bash
    npm install
-   
 
 3. **Configure environment variables:**
 
    Create a `.env` file in the root directory and set the following environment variables:
-
    ```plaintext
    PORT=3000
    MONGODB_URI=mongodb://localhost:27017/productsdb
-
 
 ## Running the Application
 
@@ -61,9 +55,7 @@ To start the application, run:
 
 ```bash
 npm start
-
 ```
-
 The API will be available at `http://localhost:3000/api/v1/products`.
 
 ## API Documentation
