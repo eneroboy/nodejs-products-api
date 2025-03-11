@@ -1,5 +1,7 @@
 const allowedCategories = ['electronics', 'books', 'clothing'];
 
+let forbiddenPhrases = ['test', 'demo'];
+
 const priceLimits = {
   electronics: { min: 50, max: 50000 },
   books: { min: 5, max: 500 },
@@ -7,6 +9,12 @@ const priceLimits = {
 };
 
 const strategies = {
+  forbiddenPhrase: (data) => {
+    if (data.name && forbiddenPhrases.some(phrase => data.name.toLowerCase().includes(phrase.toLowerCase()))) {
+      return 'Nazwa produktu zawiera niedozwoloną frazę';
+    }
+    return null;
+  },
   nameLength: (data) => {
     if (data.name && (data.name.length < 3 || data.name.length > 20)) {
       return 'Nazwa produktu musi mieć od 3 do 20 znaków';

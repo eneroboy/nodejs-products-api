@@ -2,26 +2,28 @@ const productRepository = require('../repositories/productRepository');
 const productHistoryRepository = require('../repositories/productHistoryRepository');
 const { validateProduct } = require('../validators/productValidator');
 
-let forbiddenPhrases = ['test', 'demo'];
-
-const containsForbiddenPhrase = (name) => {
-  return forbiddenPhrases.some(phrase => name.toLowerCase().includes(phrase.toLowerCase()));
-};
-
 const getAllProducts = async () => {
   return await productRepository.getAllProducts();
 };
+
+// const getProductById = async (id) => {
+//   const product = await productRepository.getProductById(id);
+//   if (!product) {
+//     throw { status: 404, message: 'Produkt nie znaleziony' };
+//   }
+//   return product;
+// };
 
 const getProductById = async (id) => {
   const product = await productRepository.getProductById(id);
   if (!product) {
     throw { status: 404, message: 'Produkt nie znaleziony' };
   }
-  return product;
+  const history = await productHistoryRepository.getHistoryByProductId(product._id);
+  return { ...product.toObject(), history };
 };
 
 const createProduct = async (data) => {
-  // Walidacja przed utworzeniem produktu
   validateProduct(data);
   const product = await productRepository.createProduct(data);
   await productHistoryRepository.createHistoryRecord({
@@ -67,10 +69,5 @@ module.exports = {
   getProductById,
   createProduct,
   updateProduct,
-  deleteProduct,
-
-  addForbiddenPhrase: (phrase) => { forbiddenPhrases.push(phrase); },
-  removeForbiddenPhrase: (phrase) => {
-    forbiddenPhrases = forbiddenPhrases.filter(p => p !== phrase);
-  }
+  deleteProduct
 };
