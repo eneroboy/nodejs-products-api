@@ -4,7 +4,7 @@
     "description": "Product API with MongoDB, Swagger and integration tests",
     "main": "app.js",
     "scripts": {
-      "start": "node app.js",
+      "start": "nodemon app.js",
       "dev": "nodemon app.js",
       "test": "mocha"
     },

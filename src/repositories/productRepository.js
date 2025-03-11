@@ -14,7 +14,12 @@ const createProduct = async (data) => {
 };
 
 const updateProduct = async (id, data) => {
-  return await Product.findByIdAndUpdate(id, data, { new: true, runValidators: true });
+  const product = await Product.findById(id);
+  if (!product) {
+    return null;
+  }
+  product.set(data);
+  return await product.save();
 };
 
 const deleteProduct = async (id) => {

@@ -1,5 +1,6 @@
 const productRepository = require('../repositories/productRepository');
 const productHistoryRepository = require('../repositories/productHistoryRepository');
+const { validateProduct } = require('../validators/productValidator');
 
 let forbiddenPhrases = ['test', 'demo'];
 
@@ -20,9 +21,8 @@ const getProductById = async (id) => {
 };
 
 const createProduct = async (data) => {
-  if (containsForbiddenPhrase(data.name)) {
-    throw { status: 400, message: 'Nazwa zawiera zabronioną frazę' };
-  }
+  // Walidacja przed utworzeniem produktu
+  validateProduct(data);
   const product = await productRepository.createProduct(data);
   await productHistoryRepository.createHistoryRecord({
     productId: product._id,
@@ -33,14 +33,11 @@ const createProduct = async (data) => {
 };
 
 const updateProduct = async (id, data) => {
-  if (data.name && containsForbiddenPhrase(data.name)) {
-    throw { status: 400, message: 'Nazwa zawiera zabronioną frazę' };
-  }
+  validateProduct(data);
   const existingProduct = await productRepository.getProductById(id);
   if (!existingProduct) {
     throw { status: 404, message: 'Produkt nie znaleziony' };
   }
-
   await productHistoryRepository.createHistoryRecord({
     productId: existingProduct._id,
     change: 'update',
