@@ -1,6 +1,8 @@
+const productRepository = require('../repositories/productRepository');
+
 const allowedCategories = ['electronics', 'books', 'clothing'];
 
-let forbiddenPhrases = ['test', 'demo'];
+let forbiddenPhrases = ['test', 'demo', 'blocked'];
 
 const priceLimits = {
   electronics: { min: 50, max: 50000 },
@@ -52,21 +54,34 @@ const strategies = {
       }
     }
     return null;
+  },
+  uniqueName: async (data, options = {}) => {
+    if (data.name) {
+      const existing = await productRepository.getProductByName(data.name);
+      if (existing && (!options.currentProductId || existing._id.toString() !== options.currentProductId)) {
+        return 'Produkt o podanej nazwie już istnieje';
+      }
+    }
+    return null;
   }
 };
 
-const validateProduct = (data) => {
-  const errors = [];
-  Object.values(strategies).forEach(fn => {
-    const error = fn(data);
-    if (error) {
-      errors.push(error);
+const validateProduct = async (data, options = {}) => {
+    const errors = [];
+    const validations = Object.keys(strategies).map(key => {
+      const fn = strategies[key];
+      return Promise.resolve(fn(data, options));
+    });
+    const results = await Promise.all(validations);
+    results.forEach(result => {
+      if (result) {
+        errors.push(result);
+      }
+    });
+    if (errors.length) {
+      throw { status: 400, message: errors.join('; ') };
     }
-  });
-  if (errors.length) {
-    throw { status: 400, message: errors.join('; ') };
-  }
-};
+  };
 
 module.exports = {
   validateProduct

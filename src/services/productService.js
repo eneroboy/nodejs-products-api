@@ -6,14 +6,6 @@ const getAllProducts = async () => {
   return await productRepository.getAllProducts();
 };
 
-// const getProductById = async (id) => {
-//   const product = await productRepository.getProductById(id);
-//   if (!product) {
-//     throw { status: 404, message: 'Produkt nie znaleziony' };
-//   }
-//   return product;
-// };
-
 const getProductById = async (id) => {
   const product = await productRepository.getProductById(id);
   if (!product) {
@@ -24,7 +16,7 @@ const getProductById = async (id) => {
 };
 
 const createProduct = async (data) => {
-  validateProduct(data);
+  await validateProduct(data);
   const product = await productRepository.createProduct(data);
   await productHistoryRepository.createHistoryRecord({
     productId: product._id,
@@ -35,7 +27,7 @@ const createProduct = async (data) => {
 };
 
 const updateProduct = async (id, data) => {
-  validateProduct(data);
+  await validateProduct(data, { currentProductId: id });
   const existingProduct = await productRepository.getProductById(id);
   if (!existingProduct) {
     throw { status: 404, message: 'Produkt nie znaleziony' };
