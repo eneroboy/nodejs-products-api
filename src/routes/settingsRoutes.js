@@ -46,7 +46,7 @@
 
 /**
  * @swagger
- * /settings:
+ * settings:
  *   post:
  *     summary: Dodanie ustawień
  *     requestBody:
@@ -62,7 +62,7 @@
 
 /**
  * @swagger
- * /settings:
+ * settings:
  *   put:
  *     summary: Aktualizacja ustawień
  *     requestBody:
@@ -78,7 +78,7 @@
 
 /**
  * @swagger
- * /settings:
+ * settings:
  *   delete:
  *     summary: Usunięcie ustawień
  *     responses:
