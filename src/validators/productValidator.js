@@ -1,21 +1,10 @@
 const productRepository = require('../repositories/productRepository');
-const Settings = require('../models/Settings');
-
-// // TODO: Przenieść do bazy danych.
-// const allowedCategories = ['electronics', 'books', 'clothing'];
-
-// let forbiddenPhrases = ['test', 'demo', 'blocked'];
-
-// const priceLimits = {
-//   electronics: { min: 50, max: 50000 },
-//   books: { min: 5, max: 500 },
-//   clothing: { min: 10, max: 5000 }
-// };
+const settingsRepository = require('../repositories/settingsRepository');
 
 const getSettings = async () => {
-  let settings = await Settings.findOne();
+  let settings = await settingsRepository.getSettings();
   if (!settings) {
-    settings = await Settings.create({});
+    settings = await settingsRepository.createSettings({});
   }
   return settings;
 };

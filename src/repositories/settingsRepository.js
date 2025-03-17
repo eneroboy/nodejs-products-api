@@ -1,7 +1,8 @@
 const Settings = require('../models/Settings');
 
 const getSettings = async () => {
-  return Settings.findOne();
+  const settings = await Settings.findById('singleton');
+  return settings;
 };
 
 const createSettings = async (data) => {
@@ -10,7 +11,7 @@ const createSettings = async (data) => {
 };
 
 const updateSettings = async (data) => {
-  return Settings.findByIdAndUpdate('singleton', data, { new: true, upsert: true });
+  return Settings.findByIdAndUpdate('singleton', { $set: data }, { new: true });
 };
 
 const deleteSettings = async () => {

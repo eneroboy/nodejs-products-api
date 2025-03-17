@@ -19,7 +19,7 @@ const options = {
     },
     servers: [
       {
-        url: `http://localhost:${process.env.PORT || 3000}/api/v1/products`
+        url: `http://localhost:${process.env.PORT || 3000}/api/v1/`
       }
     ]
   },
@@ -31,6 +31,9 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 const productRoutes = require('./src/routes/productRoutes');
 app.use('/api/v1/products', productRoutes);
+
+const settingsRoutes = require('./src/routes/settingsRoutes');
+app.use('/api/v1/settings', settingsRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err);

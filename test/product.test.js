@@ -140,7 +140,7 @@ describe('Product API', () => {
 
   it('should block creation of product containing that phrase in name', async () => {
     const productData = {
-      name: "blocked",
+      name: "adam",
       category: "books",
       price: 25,
       quantity: 7

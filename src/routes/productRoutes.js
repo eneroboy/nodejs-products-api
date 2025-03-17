@@ -35,7 +35,7 @@ const productController = require('../controllers/productController');
 
 /**
  * @swagger
- * /:
+ * products/:
  *   get:
  *     summary: Pobranie listy produktów
  *     responses:
@@ -46,7 +46,7 @@ router.get('/', productController.getAllProducts);
 
 /**
  * @swagger
- * /{id}:
+ * products/{id}:
  *   get:
  *     summary: Pobranie szczegółów jednego produktu
  *     parameters:
@@ -64,7 +64,7 @@ router.get('/:id', productController.getProductById);
 
 /**
  * @swagger
- * /:
+ * products/:
  *   post:
  *     summary: Dodanie nowego produktu
  *     requestBody:
@@ -81,7 +81,7 @@ router.post('/', productController.createProduct);
 
 /**
  * @swagger
- * /{id}:
+ * products/{id}:
  *   put:
  *     summary: Aktualizacja istniejącego produktu
  *     parameters:
@@ -105,7 +105,7 @@ router.put('/:id', productController.updateProduct);
 
 /**
  * @swagger
- * /{id}:
+ * products/{id}:
  *   delete:
  *     summary: Usunięcie produktu
  *     parameters:
