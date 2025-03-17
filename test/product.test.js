@@ -4,6 +4,7 @@ const expect = chai.expect;
 const request = require('supertest');
 const app = require('../app');
 const Product = require('../src/models/Product');
+const ProductHistory = require('../src/models/ProductHistory');
 
 describe('Product API', () => {
   before((done) => {

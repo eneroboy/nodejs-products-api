@@ -1,17 +1,28 @@
 const productRepository = require('../repositories/productRepository');
+const Settings = require('../models/Settings');
 
-const allowedCategories = ['electronics', 'books', 'clothing'];
+// // TODO: Przenieść do bazy danych.
+// const allowedCategories = ['electronics', 'books', 'clothing'];
 
-let forbiddenPhrases = ['test', 'demo', 'blocked'];
+// let forbiddenPhrases = ['test', 'demo', 'blocked'];
 
-const priceLimits = {
-  electronics: { min: 50, max: 50000 },
-  books: { min: 5, max: 500 },
-  clothing: { min: 10, max: 5000 }
+// const priceLimits = {
+//   electronics: { min: 50, max: 50000 },
+//   books: { min: 5, max: 500 },
+//   clothing: { min: 10, max: 5000 }
+// };
+
+const getSettings = async () => {
+  let settings = await Settings.findOne();
+  if (!settings) {
+    settings = await Settings.create({});
+  }
+  return settings;
 };
 
 const strategies = {
-  forbiddenPhrase: (data) => {
+  forbiddenPhrase: async (data) => {
+    const { forbiddenPhrases } = await getSettings();
     if (data.name && forbiddenPhrases.some(phrase => data.name.toLowerCase().includes(phrase.toLowerCase()))) {
       return 'Nazwa produktu zawiera niedozwoloną frazę';
     }
@@ -29,15 +40,17 @@ const strategies = {
     }
     return null;
   },
-  categoryValidation: (data) => {
+  categoryValidation: async (data) => {
+      const { allowedCategories } = await getSettings();  
     if (data.category && !allowedCategories.includes(data.category)) {
       return `Kategoria musi być jedną z: ${allowedCategories.join(', ')}`;
     }
     return null;
   },
-  priceValidation: (data) => {
-    if (data.price != null && data.category && priceLimits[data.category]) {
-      const { min, max } = priceLimits[data.category];
+  priceValidation: async (data) => {
+    const { priceLimits } = await getSettings();
+    if (data.price != null && data.category && priceLimits.get(data.category)) {
+      const { min, max } = priceLimits.get(data.category);
       if (data.price < min || data.price > max) {
         return `Cena musi być w zakresie od ${min} do ${max}, ty podałeś: ${data.price}`;
       }
